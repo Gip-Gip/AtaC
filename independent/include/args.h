@@ -1,0 +1,4 @@
+#define ARGS_ENTRYDPTH 3;
+#define ARGS_SHRTDPTH 0
+#define ARGS_LONGDPTH 1
+#define ARGS_HELPDPTH 2
