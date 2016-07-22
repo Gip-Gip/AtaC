@@ -20,6 +20,8 @@ bin="atar"
 sharedinclude="independent/include/"
 buildinclude="$bin/include/"
 
+if [ ! -e "bin" ]; then mkdir "bin"; fi
+
 rm independent/*$cppext independent/*$ccext atar/*$cppext atar/*$ccext \
    atac/*$cppext atac/*$ccext $mainobj
 
