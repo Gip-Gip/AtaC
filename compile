@@ -1,0 +1,53 @@
+#!/bin/sh
+# AtaX build script
+
+cpp=cpp
+cc=cc
+ar=ar
+ld=cc
+cppargs="-Wall"
+ccargs="-Wall -c"
+arargs="-c"
+ldargs="-r"
+buildargs=""
+cppext=".i"
+ccext=".o"
+includearg="-I"
+outputarg="-o"
+addarg="-q"
+mainobj="main.o"
+bin="atar"
+sharedinclude="independent/include/"
+buildinclude="$bin/include/"
+
+rm independent/*$cppext independent/*$ccext atar/*$cppext atar/*$ccext \
+   atac/*$cppext atac/*$ccext $mainobj
+
+for var in $@; do
+    if [ $var = "atar" ]; then
+        bin="atar";
+    elif [ $var = "atac" ]; then
+        bin="atac";
+    elif [ $var = "clean" ]; then
+        exit
+    else
+        export $var;
+    fi
+
+    buildinclude="$bin/include/";
+done
+
+for file in independent/*.c $bin/*.c; do
+    echo $cpp $cppargs $includearg $sharedinclude $includearg $buildinclude \
+        "$file" $outputarg "$file$cppext" | tee /dev/stderr | sh;
+done
+
+for file in independent/*$cppext $bin/*$cppext; do
+    echo $cc $ccargs $file $outputarg $file$ccext | tee /dev/stderr | sh;
+done
+
+for file in independent/*$ccext  $bin/*$ccext; do
+    echo $ar $arargs $mainobj $addarg $file | tee /dev/stderr | sh
+done
+
+echo $ld $buildargs $mainobj $outputarg bin/$bin | tee /dev/stderr | sh;
